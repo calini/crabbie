@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/calini/crabbie/pkg/strings"
 	"net/http"
 
+	"github.com/calini/crabbie/pkg/strings"
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,8 +24,8 @@ func main() {
 func GetNewRoom(c *gin.Context) {
 	code := strings.GenerateCode(CODE_LENGTH)
 	activeRooms[code] = Room{code, []string{}}
-
-	c.String(http.StatusAccepted, "Here's your new room: "+code)
+	response := "Here's your new room: " + code
+	c.String(http.StatusAccepted, response)
 }
 
 func GetRoom(c *gin.Context) {
@@ -33,9 +33,9 @@ func GetRoom(c *gin.Context) {
 	room, found := activeRooms[c.Param("code")]
 
 	if found {
-		c.String(http.StatusOK, "camera numarul: "+room.Code)
+		c.String(http.StatusOK, "Room no: "+room.Code)
 	} else {
-		c.String(http.StatusNotFound, "Nu exista camera")
+		c.String(http.StatusNotFound, "No room was found!")
 	}
 }
 

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/calini/crabbie/pkg/strings"
@@ -33,13 +35,19 @@ func GetRoom(c *gin.Context) {
 	room, found := activeRooms[c.Param("code")]
 
 	if found {
-		c.String(http.StatusOK, "Room no: "+room.Code)
+		e, err := json.Marshal(room)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(string(e))
+		c.String(http.StatusOK, "Room info: \n"+string(e))
 	} else {
 		c.String(http.StatusNotFound, "No room was found!")
 	}
 }
 
 type Room struct {
-	Code    string
-	Players []string
+	Code    string   `json:"room_code"`
+	Players []string `json:"players"`
 }
